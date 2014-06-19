@@ -50,6 +50,25 @@ script: |
   $HOST-strip release/nwocoin-qt.exe
   cp release/nwocoin-qt.exe $OUTDIR/
   #
+  cd nwocoin
+  cd src/leveldb
+  chmod 755 build_detect_platform
+  cd ..
+  cd ..
+  export PATH=$STAGING/host/bin:$PATH
+  mkdir -p $OUTDIR/src
+  git archive HEAD | tar -x -C $OUTDIR/src
+  cp $OUTDIR/src/doc/README_windows.txt $OUTDIR/readme.txt
+  cp $OUTDIR/src/COPYING $OUTDIR/COPYING.txt
+  export LD_PRELOAD=/usr/lib/faketime/libfaketime.so.1
+  export FAKETIME=$REFERENCE_DATETIME
+  export TZ=UTC
+  cd src
+  make -f makefile.linux-mingw $MAKEOPTS DEPSDIR=$STAGING nwocoind.exe USE_UPNP=0 DEBUGFLAGS="-frandom-seed=nwocoin" USE_SSE2=1
+  $HOST-strip nwocoind.exe
+  mkdir $OUTDIR/daemon
+  cp nwocoind.exe $OUTDIR/daemon
+  #
   mkdir nsis
   git archive HEAD | tar -x -C nsis
   cd nsis/src
