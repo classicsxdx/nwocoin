@@ -50,11 +50,7 @@ script: |
   $HOST-strip release/nwocoin-qt.exe
   cp release/nwocoin-qt.exe $OUTDIR/
   #
-  cd nwocoin
-  cd src/leveldb
-  chmod 755 build_detect_platform
-  cd ..
-  cd ..
+  cd src
   export PATH=$STAGING/host/bin:$PATH
   mkdir -p $OUTDIR/src
   git archive HEAD | tar -x -C $OUTDIR/src
